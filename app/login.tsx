@@ -10,18 +10,18 @@ import {
   Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
-const LoginScreen = () => {
+const LoginScreen: React.FC  = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const router = useRouter();
+
   const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert('Error', 'Por favor completa todos los campos');
-      return;
-    }
+    
 
     setIsLoading(true);
     
@@ -36,6 +36,9 @@ const LoginScreen = () => {
     Alert.alert('Recuperar contraseña', 'Se ha enviado un enlace a tu correo');
   };
 
+  const goToregister = () => {
+    router.push('/register');
+  };
   return (
     <SafeAreaView className="flex-1 bg-white">
       <KeyboardAvoidingView 
@@ -161,7 +164,7 @@ const LoginScreen = () => {
               <Text className="text-gray-600">
                 ¿No tienes cuenta?{' '}
               </Text>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={goToregister}>
                 <Text className="text-blue-500 font-medium">
                   Regístrate
                 </Text>

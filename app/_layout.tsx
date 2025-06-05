@@ -3,8 +3,23 @@ import '../global.css';
 
 export default function RootLayout() {
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ title: 'Home' }} />
+    <Stack
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: '#f4511e',
+        },
+        headerShown: false,
+        headerTintColor: '#fff',
+      }}
+    >
+      <Stack.Screen 
+        name="login" 
+        options={{ title: 'Login' }} 
+      />
+      <Stack.Screen 
+        name="register" 
+        options={{ title: 'Register' }} 
+      />
     </Stack>
   );
 }
