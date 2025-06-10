@@ -11,25 +11,44 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { supabase } from '@/utils/supabase'; // Adjust the import path as necessary
 
-const LoginScreen: React.FC  = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+interface FormData {
+  email: string;
+  password: string;
+}
+
+
+const LoginScreen = () => {
+  const [formData, setFormData] = useState<FormData>({ 
+    email: '', 
+    password: '' });
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
 
-  const handleLogin = async () => {
-    
+  const handleInputChange = (field: keyof FormData, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
 
+  const handleLogin = async (): Promise<void> => {
     setIsLoading(true);
-    
-    // Simular llamada a API
-    setTimeout(() => {
-      setIsLoading(false);
-      Alert.alert('Éxito', `Bienvenido ${email}`);
-    }, 2000);
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+        
+      })
+
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error);
+      Alert.alert('Error', 'No se pudo iniciar sesión. Inténtalo de nuevo más tarde.');
+    }
   };
 
   const handleForgotPassword = () => {
@@ -41,7 +60,7 @@ const LoginScreen: React.FC  = () => {
   };
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <KeyboardAvoidingView 
+      <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         className="flex-1"
       >
@@ -55,7 +74,7 @@ const LoginScreen: React.FC  = () => {
               Bienvenido
             </Text>
             <Text className="text-gray-600 text-center">
-              Inicia sesión para continuar
+              Inicia sesión para 
             </Text>
           </View>
 
@@ -70,8 +89,8 @@ const LoginScreen: React.FC  = () => {
                 <TextInput
                   className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 pr-12"
                   placeholder="ejemplo@correo.com"
-                  value={email}
-                  onChangeText={setEmail}
+                  value={formData.email}
+                  onChangeText={(value) => handleInputChange('email', value)}
                   keyboardType="email-address"
                   autoCapitalize="none"
                   autoCorrect={false}
@@ -91,8 +110,8 @@ const LoginScreen: React.FC  = () => {
                 <TextInput
                   className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 pr-12"
                   placeholder="Tu contraseña"
-                  value={password}
-                  onChangeText={setPassword}
+                  value={formData.password}
+                  onChangeText={(value) => handleInputChange('password', value)}
                   secureTextEntry={!showPassword}
                   autoCapitalize="none"
                 />
@@ -100,17 +119,17 @@ const LoginScreen: React.FC  = () => {
                   className="absolute right-4 top-4"
                   onPress={() => setShowPassword(!showPassword)}
                 >
-                  <Ionicons 
-                    name={showPassword ? "eye-off-outline" : "eye-outline"} 
-                    size={20} 
-                    color="#9CA3AF" 
+                  <Ionicons
+                    name={showPassword ? "eye-off-outline" : "eye-outline"}
+                    size={20}
+                    color="#9CA3AF"
                   />
                 </TouchableOpacity>
               </View>
             </View>
 
             {/* Forgot Password */}
-            <TouchableOpacity 
+            <TouchableOpacity
               className="self-end"
               onPress={handleForgotPassword}
             >
@@ -121,9 +140,8 @@ const LoginScreen: React.FC  = () => {
 
             {/* Login Button */}
             <TouchableOpacity
-              className={`rounded-xl py-4 items-center mt-6 ${
-                isLoading ? 'bg-blue-300' : 'bg-blue-500'
-              }`}
+              className={`rounded-xl py-4 items-center mt-6 ${isLoading ? 'bg-blue-300' : 'bg-blue-500'
+                }`}
               onPress={handleLogin}
               disabled={isLoading}
             >

@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { supabase } from '../utils/supabase'; // Importa tu cliente de Supabase
+import { supabase } from '../../../utils/supabase'; // Importa tu cliente de Supabase
 
 interface FormData {
   name: string;
@@ -21,7 +21,7 @@ interface FormData {
   confirmPassword: string;
 }
 
-const RegisterScreen: React.FC = () => {
+export default function RegisterScreen(){
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -75,7 +75,7 @@ const RegisterScreen: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const { data, err } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
         options: {
@@ -84,8 +84,9 @@ const RegisterScreen: React.FC = () => {
           }
         }
       })
-    } catch (err) {
-      console.error('Error al registrar:', err);
+
+    } catch (error) {
+      console.error('Error al registrar:', error);
       Alert.alert('Error', 'Ocurrió un error al crear tu cuenta. Inténtalo de nuevo más tarde.');
     } finally {
       setIsLoading(false);
@@ -297,5 +298,3 @@ const RegisterScreen: React.FC = () => {
     </SafeAreaView>
   );
 };
-
-export default RegisterScreen;

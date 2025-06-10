@@ -12,6 +12,9 @@ export default function Index() {
       <Link href={"/register"} style={styles.button}>
         Go to Register
       </Link>
+      <Link href={"/homescreen"} style={styles.button}>
+        Go to Home Screen
+      </Link>
       </View>
   );
 }

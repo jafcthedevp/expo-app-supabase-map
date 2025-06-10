@@ -20,6 +20,10 @@ export default function RootLayout() {
         name="register" 
         options={{ title: 'Register' }} 
       />
+      <Stack.Screen 
+        name="homescreen" 
+        options={{ title: 'Home' }}
+      />
     </Stack>
   );
 }
