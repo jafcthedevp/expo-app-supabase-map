@@ -56,7 +56,7 @@ const LoginScreen = () => {
   };
 
   const goToregister = () => {
-    router.push('/(auth)/signup/register');
+    router.push('/(auth)/signup/signup');
   };
   return (
     <SafeAreaView className="flex-1 bg-white">

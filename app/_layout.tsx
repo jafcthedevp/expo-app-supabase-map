@@ -15,15 +15,15 @@ export default function RootLayout() {
         }}
       >
         <Stack.Screen 
-          name="login" 
+          name="(auth)/signin" 
           options={{ title: 'Login' }} 
         />
         <Stack.Screen 
-          name="register" 
+          name="(auth)/signup" 
           options={{ title: 'Register' }} 
         />
         <Stack.Screen 
-          name="homescreen" 
+          name="(screens)/profile" 
           options={{ title: 'Home' }}
         />
       </Stack>

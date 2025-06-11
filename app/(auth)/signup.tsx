@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { supabase } from '../../../utils/supabase'; // Importa tu cliente de Supabase
+import { supabase } from '../../utils/supabase'; // Importa tu cliente de Supabase
 
 interface FormData {
   name: string;
@@ -96,7 +96,7 @@ export default function RegisterScreen(){
 
 
   const goTologin = (): void => {
-    router.push('/(auth)/signin/login');
+    router.push('/(auth)/signin/signin');
   }
 
   return (
