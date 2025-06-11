@@ -96,7 +96,7 @@ export default function RegisterScreen(){
 
 
   const goTologin = (): void => {
-    router.push('/login');
+    router.push('/(auth)/signin/login');
   }
 
   return (

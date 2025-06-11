@@ -32,7 +32,7 @@ export default function AuthProvider(props: props) {
             if (data.session) {
                 setSession(data.session);   
             } else {
-                router.replace("/login");
+                router.replace("/(auth)/signin/login");
             }
             setLoading(false);
         };
@@ -45,7 +45,7 @@ export default function AuthProvider(props: props) {
             if (session) {
                 router.replace("/profile");
             } else {
-                router.replace('/login');
+                router.replace('/(auth)/signin/login');
             }
         });
 

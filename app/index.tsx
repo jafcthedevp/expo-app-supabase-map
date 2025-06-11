@@ -6,13 +6,13 @@ export default function Index() {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Home screen</Text>
-      <Link href={"/login"} style={styles.button}>
+      <Link href={"/(auth)/signin/login"} style={styles.button}>
         Go to Login
       </Link>
-      <Link href={"/register"} style={styles.button}>
+      <Link href={"/(auth)/signup/register"} style={styles.button}>
         Go to Register
       </Link>
-      <Link href={"/homescreen"} style={styles.button}>
+      <Link href={"/(screens)/profile"} style={styles.button}>
         Go to Home Screen
       </Link>
       </View>
