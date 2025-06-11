@@ -7,11 +7,11 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
   Platform,
-  Alert,
+  Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { supabase } from '@/utils/supabase'; // Adjust the import path as necessary
+import { supabase } from '@/utils/supabase';
 
 interface FormData {
   email: string;
@@ -25,6 +25,9 @@ const LoginScreen = () => {
     password: '' });
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [errorAlert, setErrorAlert] = useState<string | null>(null);
+  const [successAlert, setSuccessAlert] = useState<string | null>(null);
+  const [infoAlert, setInfoAlert] = useState<string | null>(null);
 
   const router = useRouter();
 
@@ -39,11 +42,25 @@ const LoginScreen = () => {
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      if (formData.email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) {
+          Alert.alert('Error', 'Por favor, ingresa un correo electrónico válido.');
+          setIsLoading(false);
+          return;
+        }
+      }
+
+
+      const { error } = await supabase.auth.signInWithPassword({
         email: formData.email,
         password: formData.password,
-        
       })
+      if (error) {
+        Alert.alert('Error', error.message);
+        setIsLoading(false);
+        return;
+      }
 
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
@@ -56,8 +73,10 @@ const LoginScreen = () => {
   };
 
   const goToregister = () => {
-    router.push('/(auth)/signup/signup');
+    router.push('/(auth)/signup');
   };
+
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <KeyboardAvoidingView
@@ -78,6 +97,8 @@ const LoginScreen = () => {
             </Text>
           </View>
 
+           
+
           {/* Form */}
           <View className="space-y-4">
             {/* Email Input */}
@@ -88,7 +109,7 @@ const LoginScreen = () => {
               <View className="relative">
                 <TextInput
                   className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 pr-12"
-                  placeholder="ejemplo@correo.com"
+                  placeholder="example@mail.com"
                   value={formData.email}
                   onChangeText={(value) => handleInputChange('email', value)}
                   keyboardType="email-address"
@@ -109,7 +130,7 @@ const LoginScreen = () => {
               <View className="relative">
                 <TextInput
                   className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-gray-800 pr-12"
-                  placeholder="Tu contraseña"
+                  placeholder="********"
                   value={formData.password}
                   onChangeText={(value) => handleInputChange('password', value)}
                   secureTextEntry={!showPassword}

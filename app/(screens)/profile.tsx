@@ -75,8 +75,11 @@ const Profile: React.FC<ProfileProps> = ({
     try {
 
       const { error } = await supabase.auth.signOut();
-      // await supabase.auth.signOut();
-      onLogout?.();
+      if (error) {
+        console.error('Error al cerrar sesión:', error.message);
+        return;
+      }
+      
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
     }

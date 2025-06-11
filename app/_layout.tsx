@@ -26,6 +26,10 @@ export default function RootLayout() {
           name="(screens)/profile" 
           options={{ title: 'Home' }}
         />
+        <Stack.Screen
+          name="(screens)/map"
+          options={{ title: 'Map' }}
+        />
       </Stack>
     </AuthProvider>
   );
