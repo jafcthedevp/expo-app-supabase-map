@@ -10,6 +10,19 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { supabase } from '@/utils/supabase'; // Adjust the import path as necessary
 
+type User = {
+  id: string;
+  email: string;
+  name: string;
+  avatar?: string;
+  bio?: string;
+  location?: string;
+  joinDate?: string;
+  followers?: number;
+  following?: number;
+  posts?: number;
+}
+
 interface ProfileProps {
   user?: {
     name: string;
@@ -28,25 +41,24 @@ interface ProfileProps {
 }
 
 const Profile: React.FC<ProfileProps> = ({
-  user = {
-    name: 'Juan Pérez',
-    email: 'juan.perez@email.com',
-    bio: 'Desarrollador móvil apasionado por React Native y tecnologías emergentes.',
-    location: 'Lima, Perú',
-    joinDate: 'Enero 2023',
-    followers: 1234,
-    following: 567,
-    posts: 89,
-  },
-  onEditProfile,
-  onSettings,
-  onLogout,
-}) => {
-  const profileStats = [
-    { label: 'Posts', value: user.posts || 0 },
-    { label: 'Seguidores', value: user.followers || 0 },
-    { label: 'Siguiendo', value: user.following || 0 },
-  ];
+    user = {
+      name: 'Juan Pérez',
+      email: 'juan.perez@email.com',
+      bio: 'Desarrollador móvil apasionado por React Native y tecnologías emergentes.',
+      location: 'Lima, Perú',
+      joinDate: 'Enero 2023',
+      followers: 1234,
+      following: 567,
+      posts: 89,
+    },
+    onEditProfile,
+    onSettings,
+  }) => {
+    const profileStats = [
+      { label: 'Posts', value: user.posts || 0 },
+      { label: 'Seguidores', value: user.followers || 0 },
+      { label: 'Siguiendo', value: user.following || 0 },
+    ];
 
   const menuItems = [
     {
@@ -71,18 +83,26 @@ const Profile: React.FC<ProfileProps> = ({
     },
   ];
 
-  const signOut = async () => {
-    try {
+  const getCurrentUser = async(): Promise<User | void> => {
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
 
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        console.error('Error al cerrar sesión:', error.message);
-        return;
-      }
-      
-    } catch (error) {
-      console.error('Error al cerrar sesión:', error);
+    if(error) {
+      console.error('Error al obtener el usuario:', error.message);
     }
+    console.log(user)
+  }
+
+  const signOut = async () => {
+    console.log('Signing out...');
+    
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      console.error('Error al cerrar sesión:', error.message);
+    } 
   }
 
   const formatNumber = (num: number): string => {

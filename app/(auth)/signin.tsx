@@ -1,17 +1,17 @@
+import { supabase } from '@/utils/supabase';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
-  View,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
   Text,
   TextInput,
   TouchableOpacity,
-  SafeAreaView,
-  KeyboardAvoidingView,
-  Platform,
-  Alert
+  View
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import { supabase } from '@/utils/supabase';
 
 interface FormData {
   email: string;
@@ -50,23 +50,30 @@ const LoginScreen = () => {
           return;
         }
       }
-
-
-      const { error } = await supabase.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password,
-      })
+        const { error } = await supabase.auth.signInWithPassword({
+          email: formData.email,
+          password: formData.password,
+        })
       if (error) {
         Alert.alert('Error', error.message);
         setIsLoading(false);
         return;
       }
-
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
       Alert.alert('Error', 'No se pudo iniciar sesión. Inténtalo de nuevo más tarde.');
     }
   };
+
+      const handleSocialLogin = (provider: string) => {
+        if (provider === 'logo-google') {
+          // Lógica para Google
+        } else if (provider === 'logo-apple') {
+          // Lógica para Apple
+        } else if (provider === 'logo-facebook') {
+          // Lógica para Facebook
+        }
+      };
 
   const handleForgotPassword = () => {
     Alert.alert('Recuperar contraseña', 'Se ha enviado un enlace a tu correo');
@@ -76,6 +83,22 @@ const LoginScreen = () => {
     router.push('/(auth)/signup');
   };
 
+  const buttons = [
+    {
+      name: "logo-google",
+      color: "#DB4437",
+    },
+    {
+      name: "logo-apple",
+      color: "#000",
+    },
+    {
+      name: "logo-facebook",
+      color: "#1877F2",
+    }
+  ]
+
+  
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -186,16 +209,17 @@ const LoginScreen = () => {
               </View>
 
               <View className="flex-row space-x-4">
-                <TouchableOpacity className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-3 items-center">
-                  <Ionicons name="logo-google" size={24} color="#DB4437" />
-                </TouchableOpacity>
-                <TouchableOpacity className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-3 items-center">
-                  <Ionicons name="logo-apple" size={24} color="#000" />
-                </TouchableOpacity>
-                <TouchableOpacity className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-3 items-center">
-                  <Ionicons name="logo-facebook" size={24} color="#1877F2" />
-                </TouchableOpacity>
+                {buttons.map((btn, idx) => (
+                  <TouchableOpacity
+                    key={btn.name}
+                    className="flex-1 bg-gray-50 border border-gray-200 rounded-xl py-3 items-center"
+                    onPress={() => handleSocialLogin(btn.name)}
+                  >
+                    <Ionicons name={btn.name as any} size={24} color={btn.color} />
+                  </TouchableOpacity>
+                ))}
               </View>
+              
             </View>
 
             {/* Sign Up Link */}

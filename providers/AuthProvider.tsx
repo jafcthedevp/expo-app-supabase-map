@@ -61,5 +61,7 @@ export default function AuthProvider(props: props) {
         )
 }
 
-export const useAuth = () => { useContext(AuthContext)};
+export const useAuth = () => { 
+    return useContext(AuthContext)
+};
     
